@@ -38,7 +38,8 @@ const DataTable = () => {
 
 
     const [studentList, setStudentList] = useState(studentInfo);
-
+    const [student, setStudent] = useState({id: 0, firstName: '', lastName: '', age: 0, birthdate: '', country: '', city: ''});
+    const [showDetails, setShowDetails] = useState(false);
 
     const TableHeader = () => {
         return(
@@ -54,8 +55,12 @@ const DataTable = () => {
         );
     }
 
-    const TableAction = () => {
-        return (<button type="button" class="btn btn-primary">Details</button>)
+    const TableAction = (props) => {
+        const btnAction = () =>{
+            setStudent(props.studentInfo)
+            setShowDetails(true)
+        }
+        return (<button type="button" class="btn btn-primary" onClick={btnAction}>Details</button>)
     }
 
     const TableRow = (props) => {
@@ -67,12 +72,25 @@ const DataTable = () => {
                     <td>{student.firstName}</td>
                     <td>{student.lastName}</td>
                     <td>{student.age}</td>
-                    <td><TableAction/></td>
+                    <td><TableAction studentInfo={student}/></td>
                 </tr>
             );
         })
         return <tbody>{row}</tbody>
     }
+
+    const ShowStudentDetails = (props) => {
+        return(
+            <div>
+                <h3>Student information</h3>
+                <p><b>{student.city}, {student.country}</b></p>
+                <p>Name: {student.firstName} {student.lastName}</p>
+                <p>Age: {student.age}</p>
+                <button type="button" class="btn btn-outline-info mb-1" onClick={() => {setStudent({}); setShowDetails(false)}}>Hide</button>
+            </div>
+        );
+    }
+
     return(
         <div class="container border">
             <h2>Student List</h2>
@@ -80,6 +98,7 @@ const DataTable = () => {
                 <TableHeader />
                 <TableRow studentInfo = {studentList} />
             </table>
+            <ShowStudentDetails student={student}/>
         </div>
     )
 
